@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {BarChart, Bar, Rectangle, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Pie, PieChart, Cell, ResponsiveContainer} from "recharts";
+import {BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Pie, PieChart, Cell, ResponsiveContainer} from "recharts";
 import "./App.css"
 
 function App() {
@@ -76,7 +76,7 @@ function App() {
     if (selectedCategory === "All") {
         difficultyTitle = "Difficulty Distribution (All Categories)";
     } else {
-        difficultyTitle = `Difficulty in ${selectedCategory}`;
+        difficultyTitle = `Difficulty of Questions in ${selectedCategory}`;
     }
 
 
@@ -114,12 +114,20 @@ function App() {
                                     <YAxis dataKey="name" type="category" width={300} />
                                     <Tooltip />
                                     <Legend verticalAlign="top" align="center" wrapperStyle={{ top: 0 }} />
-                                    <Bar
-                                        dataKey="total"
-                                        name="Number of Questions"
-                                        fill="#8884d8"
-                                        activeBar={<Rectangle fill="pink" stroke="blue" strokeWidth={2} />}
-                                    />
+                                    <Bar dataKey="total" name="Number of Questions" fill="#8884d8">
+                                        {categoriesStats.map((entry) => (
+                                            <Cell
+                                                key={entry.name}
+                                                fill={
+                                                    selectedCategory === "All"
+                                                        ? "#8884d8"
+                                                        : selectedCategory === entry.name
+                                                            ? "#8884d8"
+                                                            : "#cbd5e1"
+                                                }
+                                            />
+                                        ))}
+                                    </Bar>
                                 </BarChart>
                             </ResponsiveContainer>
                         </div>

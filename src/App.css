@@ -29,16 +29,33 @@ select:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
 }
+
+.filter-bar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.charts-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+}
+
 
 .chart-card {
     background: #fff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     border-radius: 16px;
-    padding: 20px;
+    flex-direction: row;
+    padding: 0;
     width: 90%;
-    max-width: 1200px;
+    max-width: 600px;
 }
 
 .chart-card h2 {
@@ -48,11 +65,4 @@ select:hover {
     font-weight: 600;
 }
 
-.recharts-wrapper {
-    margin: 0 auto;
-}
 
-.legend {
-    margin: auto;
-    font-size: 14px;
-}

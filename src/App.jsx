@@ -71,10 +71,18 @@ function App() {
         }
     }, [selectedCategory, questions]);
 
+    let difficultyTitle = "";
+
+    if (selectedCategory === "All") {
+        difficultyTitle = "Difficulty Distribution (All Categories)";
+    } else {
+        difficultyTitle = `Difficulty in ${selectedCategory}`;
+    }
+
 
     return (
         <div className="dashboard">
-            <div>
+            <div className="filter-bar">
                 <label htmlFor="category">Filter by category: </label>
                 <select
                     id="category"
@@ -89,59 +97,66 @@ function App() {
                     ))}
                 </select>
             </div>
+                <div className="charts-row">
+                    <div className="chart-card">
+                        <h2>Questions per Category</h2>
+                        <div style={{ width: "95%", height: categoriesStats.length * 30 + 100, margin: "0 auto" }}>
+                            <ResponsiveContainer>
+                                <BarChart
+                                    layout={"vertical"}
+                                    data={categoriesStats}
+                                    margin={{ top: 20, bottom: 10 }}
+                                    barCategoryGap="20%"
 
-            <div className="chart-card">
-                <h2>Questions per Category</h2>
-                <div style={{ width: "100%", height: 600 }}>
-                    <ResponsiveContainer>
-                        <BarChart
-                            data={categoriesStats}
-                            margin={{ top: 5, right: 20, left: 20, bottom: 300 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" angle={90} textAnchor="start" interval={0} />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend verticalAlign="top" align="center" wrapperStyle={{ top: 0 }} />
-                            <Bar
-                                dataKey="total"
-                                fill="#8884d8"
-                                activeBar={<Rectangle fill="pink" stroke="blue" strokeWidth={2} />}
-                            />
-                        </BarChart>
-                    </ResponsiveContainer>
+                                >
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis type="number" />
+                                    <YAxis dataKey="name" type="category" width={300} />
+                                    <Tooltip />
+                                    <Legend verticalAlign="top" align="center" wrapperStyle={{ top: 0 }} />
+                                    <Bar
+                                        dataKey="total"
+                                        name="Number of Questions"
+                                        fill="#8884d8"
+                                        activeBar={<Rectangle fill="pink" stroke="blue" strokeWidth={2} />}
+                                    />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </div>
+
+                    <div className="chart-card" style={{ width: 400, height: 575}}>
+                        <h2>
+                            {difficultyTitle}
+                        </h2>
+                        <ResponsiveContainer>
+                            <PieChart>
+                                <Pie
+                                    data={difficultyStats}
+                                    innerRadius="70%"
+                                    outerRadius="100%"
+                                    cornerRadius={10}
+                                    paddingAngle={5}
+                                    dataKey="value"
+                                    labelLine={false}
+                                    label={({ cx, cy }) => {
+                                        const total = difficultyStats.reduce((sum, entry) => sum + entry.value, 0);
+                                        return (
+                                            <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle" fontSize="16">
+                                                Total: {total}
+                                            </text>
+                                        );
+                                    }}
+                                >
+                                    {difficultyStats.map((entry) => (
+                                        <Cell key={entry.name} fill={colors[entry.name]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                                <Legend verticalAlign="bottom" align="center" wrapperStyle={{ top: 0 }} />
+                            </PieChart>
+                        </ResponsiveContainer>
                 </div>
-            </div>
-
-            <div className="chart-card" style={{ width: 400, height: 500}}>
-                <h2>Difficulty</h2>
-                <ResponsiveContainer>
-                    <PieChart>
-                        <Pie
-                            data={difficultyStats}
-                            innerRadius="70%"
-                            outerRadius="100%"
-                            cornerRadius={10}
-                            paddingAngle={5}
-                            dataKey="value"
-                            labelLine={false}
-                            label={({ cx, cy }) => {
-                                const total = difficultyStats.reduce((sum, entry) => sum + entry.value, 0);
-                                return (
-                                    <text x={cx} y={cy} textAnchor="middle" dominantBaseline="middle" fontSize="16">
-                                        Total: {total}
-                                    </text>
-                                );
-                            }}
-                        >
-                            {difficultyStats.map((entry) => (
-                                <Cell key={entry.name} fill={colors[entry.name]} />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend verticalAlign="bottom" align="center" wrapperStyle={{ top: 0 }} />
-                    </PieChart>
-                </ResponsiveContainer>
             </div>
         </div>
     );
